@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>all info from NettyService</title>
+</head>
+
+<body>
+
+<script type="text/javascript">
+
+var socket;
+if(!window.WebSocket){
+	window.WebSocket = window.MozWebSocket;
+}
+
+if(window.WebSocket){
+	socket = new WebSocket("ws://localhost:82/websocket");	//客户端是以WebSocket的方式（即ws://）请求
+	socket.onmessage = function(event){
+		var ta = document.getElementById('responseText');
+		ta.value = "";
+		ta.value = event.data;
+	};
+	socket.onopen = function(event){
+		var ta = document.getElementById('responseText');
+		ta.value = "打开 WebSocket 服务器正常，浏览器支持 WebSocket!";
+	};
+	socket.onclose = function(event){
+		var ta = document.getElementById('responseText');
+		ta.value = "";
+		ta.value = "WebSocket 关闭!";
+	};
+
+}
+else{
+	alert("sorry!您的浏览器不支持 WebSocket 协议！");
+}
+
+
+function send(message){
+
+	//将json对象转换成字符串传递到后台  
+	//var paramMap=JSON.stringify(message);
+  
+	if(!window.WebSocket){ return ;}
+	if(socket.readyState == WebSocket.OPEN){
+		socket.send(message);
+	}
+	else{
+		alert("WebSocket 连接没有建立成功！");
+	}
+}
+
+function webSocketClose(){
+	if(!window.WebSocket){ return ;}
+	socket.close();
+}
+
+</script>
+
+<form>
+	<input type="text" name="message" value='{"uId":"1001","request":[{"type":"all","timeStamp":"1451110285035","status":"0"}]}'/>
+	<br><br>
+	<input type="button" value="发送 WebSocket 请求消息" onclick="send(this.form.message.value)"/>
+	<br><br>
+	<input type="button" value="断开 WebSocket 请求消息" onclick="webSocketClose()"/>
+	<hr color="blue"/>
+	<h3>服务器返回的应答消息</h3>
+	<textarea id="responseText" style="width:500px;height:500px;"></textarea>
+</form>
+
+
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>综合页面：get info from NettyService</title>
+<script src="jquery-1.9.1.min.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+<script type="text/javascript">
+	
+	var socket, socket2, socket3;
+	if(!window.WebSocket){
+		window.WebSocket = window.MozWebSocket;
+	}
+	
+	//socket
+	if(window.WebSocket){
+		socket = new WebSocket("ws://localhost:82/websocket");
+		socket.onmessage = function(event){
+			var ta = document.getElementById('responseText');
+			ta.innerHTML = "";
+			ta.innerHTML = event.data;
+		};
+		socket.onopen = function(event){
+			var ta = document.getElementById('responseText');
+			ta.innerHTML = "打开 WebSocket 服务器正常，浏览器支持 WebSocket!";
+		};
+		socket.onclose = function(event){
+			var ta = document.getElementById('responseText');
+			ta.innerHTML = "";
+			ta.innerHTML = "WebSocket 关闭!";
+		};
+	
+	}
+	else{
+		alert("sorry!您的浏览器不支持 WebSocket 协议！");
+	}
+	
+	//socket2
+	if(window.WebSocket){
+		socket2 = new WebSocket("ws://localhost:82/websocket");
+		socket2.onmessage = function(event){
+			var ta = document.getElementById('responseText2');
+			ta.innerHTML = "";
+			ta.innerHTML = event.data;
+		};
+		socket2.onopen = function(event){
+			var ta = document.getElementById('responseText2');
+			ta.innerHTML = "打开 WebSocket 服务器正常，浏览器支持 WebSocket!";
+		};
+		socket2.onclose = function(event){
+			var ta = document.getElementById('responseText2');
+			ta.innerHTML = "";
+			ta.innerHTML = "WebSocket 关闭!";
+		};
+	}
+	else{
+		alert("sorry!您的浏览器不支持 WebSocket 协议！");
+	}
+	
+	//socket3
+	if(window.WebSocket){
+		socket3 = new WebSocket("ws://localhost:82/websocket");
+		socket3.onmessage = function(event){
+			var ta = document.getElementById('responseText3');
+			ta.innerHTML = "";
+			ta.innerHTML = event.data;
+		};
+		socket3.onopen = function(event){
+			var ta = document.getElementById('responseText3');
+			ta.innerHTML = "打开 WebSocket 服务器正常，浏览器支持 WebSocket!";
+		};
+		socket3.onclose = function(event){
+			var ta = document.getElementById('responseText3');
+			ta.innerHTML = "";
+			ta.innerHTML = "WebSocket 关闭!";
+		};
+	}
+	else{
+		alert("sorry!您的浏览器不支持 WebSocket 协议！");
+	}
+	
+	function send(count){
+		if(!window.WebSocket){ return ;}
+		
+		var message ;
+		
+		if(count==1){
+			if(socket.readyState == WebSocket.OPEN){
+				message = $("#msg1").text();
+				socket.send(message);
+			}
+			else{
+				alert("WebSocket 连接没有建立成功！");
+			}
+		}else if(count==2){
+			if(socket2.readyState == WebSocket.OPEN){
+				message = $("#msg2").text();
+				socket2.send(message);
+			}
+			else{
+				alert("WebSocket 连接没有建立成功！");
+			}
+		}else if(count==3){
+			if(socket3.readyState == WebSocket.OPEN){
+				message = $("#msg3").text();
+				socket3.send(message);
+			}
+			else{
+				alert("WebSocket 连接没有建立成功！");
+			}
+		}
+		
+		
+		
+	}
+	
+	function webSocketClose(count){
+		if(!window.WebSocket){ return ;}
+		if(count==1){
+			socket.close();
+		}
+		else if (count==2){
+			socket2.close();
+		}
+		else if (count==3){
+			socket3.close();
+		}
+		
+	}
+
+</script>
+
+<form>
+
+	<table border="1px" bordercolor="#000000">
+		<tr>
+			<td colspan="2"><h3>用户ID为[1001]的消息</h3></td>
+		</tr>
+		<tr>
+			<td style=" width:50%;">
+				<table>
+					<tr>
+						<td colspan="2">
+							<span style="background-color:#CCCCFF">请求参数：</span>
+							<div id="msg1">{"uId":"1001","request":[{"type":"igoal","timeStamp":"1451110285035","status":"0"}]}</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="button" value="发送 WebSocket 请求消息" onclick="send(1)"/>
+							<br />(获取用户[<span style="color:red">igoal</span>]模块的消息)
+						</td>
+						<td>
+							<input type="button" value="断开 WebSocket 请求消息" onclick="webSocketClose(1)"/>
+							<br />(模拟用户关闭浏览器断开网络连接)
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<h3>服务器返回的应答消息</h3>
+							<div id="responseText" style=" background-color:#CCCCFF"></div>
+						</td>
+					</tr>
+				</table>
+			</td>
+			<td style="width:50%;">
+				<table>
+					<tr>
+						<td colspan="2">
+							<span style="background-color:#CCCCFF">请求参数：</span>
+							<div id="msg2">{"uId":"1001","request":[{"type":"memo","timeStamp":"1451110285035","status":"0"},{"type":"igoal","timeStamp":"1451110285035","status":"0"}]}</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="button" value="发送 WebSocket 请求消息" onclick="send(2)"/>
+							<br />(获取用户[<span style="color:red">igoal、memo</span>]两个模块的消息)
+						</td>
+						<td>
+							<input type="button" value="断开 WebSocket 请求消息" onclick="webSocketClose(2)"/>
+							<br />(模拟用户关闭浏览器断开网络连接)
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<h3>服务器返回的应答消息</h3>
+							<div id="responseText2" style=" background-color:#CCCCFF"></div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"><h3>用户ID为[1002]的消息</h3></td>
+		</tr>
+		<tr>
+			<td collapse="2">
+				<table style="width:100%;">
+					<tr>
+						<td colspan="2">
+							<span style="background-color:#CCCCFF">请求参数：</span>
+							<div id="msg3">{"uId":"1002","request":[{"type":"all","timeStamp":"1450782045984","status":"0"}]}</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="button" value="发送 WebSocket 请求消息" onclick="send(3)"/>
+							<br />(获取用户[<span style="color:red">所有</span>]模块的消息)
+						</td>
+						<td>
+							<input type="button" value="断开 WebSocket 请求消息" onclick="webSocketClose(3)"/>
+							<br />(模拟用户关闭浏览器断开网络连接)
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<h3>服务器返回的应答消息</h3>
+							<div id="responseText3" style=" background-color:#CCCCFF"></div>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	
+	
+	<h5>注意：运行该页面时，因多个socket对象，会偶尔出现某个socket连接失败的情况，单个websocket对象时没问题（服务器控制台可见异常信息），不知道是否和浏览器有关，不过该问题可以忽略不计，非本demo研究内容</h5>
+
+
+</form>
+
+
+</body>
+</html>
